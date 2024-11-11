@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+        .nav {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            padding: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 1.5rem;
+            padding: 0.7rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background-color: rgba(255,255,255,0.1);
+        }
+        .user-info {
+            background: white;
+            padding: 2rem;
+            margin: 2rem auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            border: 2px solid #4ECDC4;
+            text-align: center;
+        }
+        .user-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #FF6B6B;
+            margin-bottom: 1rem;
+        }
+        .posts-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+        .post {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #4ECDC4;
+            transition: transform 0.3s ease;
+        }
+        .post:hover {
+            transform: translateY(-5px);
+        }
+        .post-visibility {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            color: white;
+            background: #FF6B6B;
+        }
+        .download-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            margin-top: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .download-button:hover {
+            transform: translateY(-2px);
+        }
+
+    </style>
+</head>
+<body>
+<nav class="nav">
+    <a th:href="@{/post/public}">Public Posts</a>
+    <a th:href="@{/post/public/search}">Search</a>
+</nav>
+
+<div class="user-info">
+    <h2 th:text="${user.username}"></h2>
+    <img th:if="${user.avatarPath}" th:src="${user.avatarPath}" style="max-width: 150px; border-radius: 50%;"/>
+    <p th:text="${user.email}"></p>
+</div>
+
+<div class="posts-container">
+    <h3>Your Posts</h3>
+    <div th:each="post : ${user.posts}" class="post">
+        <h4 th:text="${post.title}"></h4>
+        <div th:text="${post.content}"></div>
+        <p th:text="${post.publicFLag ? 'Public' : 'Private'}" class="post-visibility"></p>
+        <a th:if="${post.attachmentPath}"
+           th:href="@{/post/download/{id}(id=${post.id})}"
+           class="download-button">
+            Download Attachment
+        </a>
+
+    </div>
+</div>
+
+</body>
+</html>

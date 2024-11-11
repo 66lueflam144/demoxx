@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: fast.skyss.demo01.Demo01Application
+

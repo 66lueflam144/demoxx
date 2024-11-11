@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Public Posts</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f2f5;
+    }
+    .nav {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .nav a {
+      color: white;
+      text-decoration: none;
+      margin-right: 1.5rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      background-color: rgba(255,255,255,0.1);
+    }
+    .create-post {
+      background: white;
+      padding: 2rem;
+      margin: 2rem auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 800px;
+      border: 2px solid #4ECDC4;
+    }
+    .post-form input, .post-form textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #FF6B6B;
+      border-radius: 10px;
+      margin: 0.5rem 0;
+      transition: all 0.3s ease;
+    }
+    .post-form button {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    .public-posts {
+      max-width: 800px;
+      margin: 2rem auto;
+    }
+    .post {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-left: 5px solid #4ECDC4;
+    }
+    .download-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      margin-top: 1rem;
+      transition: transform 0.3s ease;
+    }
+    .download-button:hover {
+      transform: translateY(-2px);
+    }
+
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a th:href="@{/user/home}">Home</a>
+  <a th:href="@{/post/public}">Public Posts</a>
+  <a th:href="@{/post/public/search}">Search</a>
+</nav>
+
+<div class="create-post">
+  <h2>Create New Post</h2>
+  <form th:action="@{/post/create}" method="post" enctype="multipart/form-data" class="post-form">
+    <div>
+      <input type="text" name="title" placeholder="Post Title" required/>
+    </div>
+    <div>
+      <textarea name="content" placeholder="Write your post here..." required rows="4"></textarea>
+    </div>
+    <div>
+      <input type="file" name="attachment"/>
+    </div>
+    <div>
+      <label>
+        <input type="checkbox" name="isPublic" value="true" checked/>
+        Make Public
+      </label>
+    </div>
+    <button type="submit">Create Post</button>
+  </form>
+</div>
+
+<div class="public-posts">
+  <h2>Public Posts</h2>
+  <div th:each="post : ${publicPosts}" class="post">
+    <h3 th:text="${post.title}"></h3>
+    <p th:text="'Posted by: ' + ${post.user.username}"></p>
+    <div th:text="${post.content}"></div>
+
+    <a th:if="${post.attachmentPath}"
+       th:href="@{/post/download/{id}(id=${post.id})}"
+       class="download-button">
+      Download Attachment
+    </a>
+
+  </div>
+</div>
+
+</body>
+</html>

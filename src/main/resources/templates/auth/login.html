@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            margin-top: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2 style="text-align: center; color: #333;">Welcome Back</h2>
+    <form th:action="@{/login/process}" method="post">
+        <div class="form-group">
+            <input type="text" name="username" placeholder="Username" required/>
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Password" required/>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <div class="register-link">
+        New user? <a th:href="@{/register}">Register here</a>
+    </div>
+    <div th:if="${param.error}" class="error-message" th:text="${param.error}">Error</div>
+</div>
+</body>
+</html>

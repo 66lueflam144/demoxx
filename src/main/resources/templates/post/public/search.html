@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Search Posts</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f2f5;
+    }
+    .nav {
+      background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .nav a {
+      color: white;
+      text-decoration: none;
+      margin-right: 1.5rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      background-color: rgba(255,255,255,0.1);
+    }
+    .nav a:hover {
+      background-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+    .search-form {
+      background: white;
+      padding: 2rem;
+      margin: 2rem auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #FF6B6B;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #FF8E53;
+      box-shadow: 0 0 0 3px rgba(255,107,107,0.2);
+    }
+    .search-button {
+      background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      width: 100%;
+    }
+    .search-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+    }
+    .post-card {
+      background: white;
+      padding: 1.5rem;
+      margin: 1.5rem auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      max-width: 800px;
+      transition: transform 0.3s ease;
+    }
+    .post-card:hover {
+      transform: translateY(-5px);
+    }
+    .download-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      margin-top: 1rem;
+      transition: transform 0.3s ease;
+    }
+    .download-button:hover {
+      transform: translateY(-2px);
+    }
+
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a th:href="@{/user/home}">Home</a>
+  <a th:href="@{/post/public}">Public Posts</a>
+</nav>
+
+<form th:action="@{/post/search}" method="post" class="search-form">
+  <input type="text" name="keyword" th:value="${keyword}" class="search-input" placeholder="Search posts..."/>
+  <button type="submit" class="search-button">Search</button>
+</form>
+
+<div th:if="${posts != null and not posts.isEmpty()}">
+  <div th:each="post : ${posts}" class="post-card">
+    <h2 class="post-title" th:text="${post.title}"></h2>
+    <div class="post-meta">
+      <span th:text="'Posted by: ' + ${post.user.username}"></span>
+      <span th:text="' | ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+    </div>
+    <div class="post-content" th:utext="${post.content}"></div>
+    <!-- Move download link inside the post loop -->
+    <a th:if="${post.attachmentPath}"
+       th:href="@{/post/download/{id}(id=${post.id})}"
+       class="download-button">
+      Download Attachment
+    </a>
+  </div>
+</div>
+
+<!-- Separate empty results message -->
+<div th:if="${posts == null or posts.isEmpty()}">
+  <p style="text-align: center; color: #666;">No posts found matching your search.</p>
+</div>
+
+</body>
+</html>
